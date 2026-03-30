@@ -61,7 +61,9 @@ def generator():
                 "messages": [{"role": "user", "content": prompt}]
             }
         )
-
+         print("KEY:", OPENROUTER_API_KEY)
+         print("STATUS:", response.status_code)
+         print("RESPONSE:", response.text)
         result = response.json()
 
         if "error" in result:
