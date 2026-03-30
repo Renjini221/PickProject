@@ -3,11 +3,9 @@ import requests
 import json
 import re
 import random
-import os
-
 app = Flask(__name__, template_folder="../templates")
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_KEY ="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"
 
 fallback_ideas = [
     {
@@ -61,9 +59,7 @@ def generator():
                 "messages": [{"role": "user", "content": prompt}]
             }
         )
-         print("KEY:", OPENROUTER_API_KEY)
-         print("STATUS:", response.status_code)
-         print("RESPONSE:", response.text)
+       
         result = response.json()
 
         if "error" in result:
