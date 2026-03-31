@@ -7,17 +7,6 @@ app = Flask(__name__, template_folder="../templates")
 
 OPENROUTER_API_KEY ="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"
 
-fallback_ideas = [
-    {
-        "title": "Student Study Planner",
-        "description": "A web app to plan daily study schedules",
-        "whyItMatters": "Helps students stay organized",
-        "coreFeatures": ["Task planner", "JavaScript", "Flask"],
-        "techStack": ["Flask", "HTML", "CSS"],
-        "bonus": "Dark mode"
-    }
-]
-
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -84,23 +73,6 @@ import random
 
 app = Flask(__name__)
 OPENROUTER_API_KEY="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"
-fallback_ideas=[
-{
-    "title":"Student Study Planner",
-    "Desciption":"A web app to plan daily study schedules and track progress",
-    "WhyItMatters":"Helps students stay organized and improve productivity",
-    "coreFeatures":["Task planner","javacript","Flask"],
-    "bonus":"Dark moode"
-},
-{
-    "title":"Food waste tracker",
-    "description":"Tracks leftover food and reduce waste.",
-    "whyItMatters":"Helps students stay organized nad improve productivity",
-    "coreFeatures":["Task planner","remainders","Subject tracking"],
-    "techStack":["Flask","SQLlite"],
-    "bonus":"Charts fro analytics"
-}
-]
 @app.route("/")
 def home():
     return render_template("index.html")
