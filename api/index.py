@@ -3,7 +3,7 @@ import requests, json, re, random, os
 
 app = Flask(__name__, template_folder="templates")
 
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
 fallback_ideas = [
     {
