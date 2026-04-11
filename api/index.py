@@ -1,103 +1,479 @@
-from flask import Flask, request, jsonify, render_template
-import requests, json, re, random, os
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Project Idea Generator</title>
+    <meta name="description" content="Generate unique project ideas for students based on time, skill level, and category">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Comic Neue', cursive, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+        }
+        .header {
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        #nav {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        #nav a {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        #nav a:hover {
+            color: #2563eb;
+        }
+        #menubtn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        #mobmenu {
+            display: none;
+            padding-bottom: 1rem;
+        }
+        #mobnav {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        #mobnav a {
+            color: #4b5563;
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        .sub {
+            color: #4b5563;
+            max-width: 42rem;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .g3 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        .g2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+        }
+        .h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+        .h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        .fields {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .lbl {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.4rem;
+        }
+        .field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .field:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37,99,235,0.2);
+        }
+        .btn {
+            width: 100%;
+            background: #2563eb;
+            color: #fff;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .sbtn {
+            background: #2563eb;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sbtn:hover {
+            background: #1d4ed8;
+        }
+        .divider {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .divider h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.75rem;
+        }
+        #recents {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .outrow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .btngroup {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #output {
+            min-height: 6rem;
+        }
+        .placeholder {
+            text-align: center;
+            padding: 3rem 0;
+            color: #6b7280;
+        }
+        .muted {
+            color: #6b7280;
+        }
+        .idea {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .idea h4 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .idea p {
+            color: #374151;
+            line-height: 1.6;
+        }
+        .idea ul {
+            padding-left: 1.2rem;
+        }
+        .idea ul li {
+            margin-bottom: 0.3rem;
+            color: #374151;
+        }
+        .err {
+            color: #ef4444;
+        }
+        .statcard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .statcard:last-child {
+            border-bottom: none;
+        }
+        .statlbl {
+            font-size: 0.6rem;
+            color: #6b7280;
+        }
+        .statnum {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+        @media (max-width: 900px) {
+            .g3 { grid-template-columns: 1fr; }
+            .g2 { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            #nav { display: none; }
+            #menubtn { display: block; }
+            .h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="wrap">
+            <div class="row">
+                <h1 class="title">ProjectGen</h1>
+                <ul id="nav"></ul>
+                <button id="menubtn">Menu</button>
+            </div>
+            <div id="mobmenu">
+                <ul id="mobnav"></ul>
+            </div>
+        </nav>
+    </header>
+    <main class="wrap">
+        <section class="hero">
+            <h2 class="h2">Smart Project Idea Generator</h2>
+            <p class="sub">Generate unique, practical project ideas tailored to your available time, skill level, and interests.</p>
+        </section>
+        <div class="g3">
+            <section class="card">
+                <h3 class="h3">Project Parameters</h3>
+                <div class="fields">
+                    <div>
+                        <label class="lbl">Time Available</label>
+                        <select id="time" class="field"></select>
+                    </div>
+                    <div>
+                        <label class="lbl">Skill Level</label>
+                        <select id="skill" class="field"></select>
+                    </div>
+                    <div>
+                        <label class="lbl">Category</label>
+                        <select id="cat" class="field"></select>
+                    </div>
+                    <button id="genbtn" class="btn">Generate Project Idea</button>
+                    <button id="randbtn" class="btn">Random Idea</button>
+                </div>
+                <div class="divider">
+                    <h4>Recent Ideas</h4>
+                    <ul id="recents"></ul>
+                </div>
+            </section>
+            <section>
+                <div class="card" style="margin-bottom:1.5rem">
+                    <div class="outrow">
+                        <h3 class="h3">Generated Project Idea</h3>
+                        <div class="btngroup">
+                            <button id="savebtn" class="sbtn">Save</button>
+                            <button id="sharebtn" class="sbtn">Share</button>
+                        </div>
+                    </div>
+                    <div id="output">
+                        <div class="placeholder">
+                            <p class="muted">Select your parameters and click "Generate Project Idea" to get started</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="g2">
+                    <div class="card">
+                        <h4 class="h4">Project Statistics</h4>
+                        <div id="stats"></div>
+                    </div>
+                    <div class="card">
+                        <h4 class="h4">Featured Projects</h4>
+                        <div id="featured"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<script>
+    const navItems  = [{ label:"Home",href:"#home"},{ label:"Generator",href:"#generator"},{ label:"Browse",href:"#browse"},{ label:"Saved",href:"#saved"},{ label:"About",href:"#about"}];
+    const timeOpts  = [{ value:"weekend",label:"Weekend Project (2-3 days)"},{ value:"week",label:"One Week Project"},{ value:"month",label:"Month-long Project"},{ value:"semester",label:"Semester Project"},{ value:"summer",label:"Summer Break Project"}];
+    const skillOpts = [{ value:"beginner",label:"Beginner"},{ value:"intermediate",label:"Intermediate"},{ value:"advanced",label:"Advanced"}];
+    const catOpts   = [{ value:"web",label:"Web Application"},{ value:"ai",label:"AI/ML Project"},{ value:"social",label:"Social Impact"},{ value:"productivity",label:"Productivity Tool"}];
 
-app = Flask(__name__)
+    const mkNav  = items => items.map(i => `<li><a href="${i.href}">${i.label}</a></li>`).join("");
+    const mkOpts = opts  => opts.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+    const mkIdea = idea  => `
+        <div class="idea">
+            <h4>${idea.title}</h4>
+            <p>${idea.description}</p>
+            <p><b>Why:</b> ${idea.whyItMatters || idea.why || "Not specified"}</p>
+            <div>
+                <b>Features:</b>
+                <ul>${idea.coreFeatures.map(f => `<li>✔ ${f}</li>`).join("")}</ul>
+            </div>
+            <p><b>Tech:</b> ${idea.techStack.join(", ")}</p>
+            <p><b>Bonus:</b> ${idea.bonus}</p>
+        </div>`;
 
-OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+    const best = obj => Object.entries(obj).sort((a,b) => b[1]-a[1])[0]?.[0] || "none";
 
-fallback_ideas = [
-    {
-        "title": "Student Study Planner",
-        "description": "A web app to plan daily study schedules and track progress.",
-        "whyItMatters": "Helps students stay organized and improve productivity.",
-        "coreFeatures": ["Task planner", "Reminders", "Subject tracking"],
-        "techStack": ["HTML", "JavaScript", "Flask"],
-        "bonus": "Dark mode support"
-    },
-    {
-        "title": "Food Waste Tracker",
-        "description": "Track leftover food and reduce waste.",
-        "whyItMatters": "Helps reduce food wastage and improve awareness.",
-        "coreFeatures": ["Food logging", "Reports", "Notifications"],
-        "techStack": ["Flask", "SQLite"],
-        "bonus": "Charts for analytics"
+    function renderStats(data) {
+        document.getElementById("stats").innerHTML = `
+            <div class="statcard"><span class="statlbl">total generated</span><span class="statnum">${data.total}</span></div>
+            <div class="statcard"><span class="statlbl">top category</span><span class="statnum">${best(data.cats)}</span></div>
+            <div class="statcard"><span class="statlbl">top skill</span><span class="statnum">${best(data.skills)}</span></div>
+            <div class="statcard"><span class="statlbl">top timeframe</span><span class="statnum">${best(data.times)}</span></div>
+            <div class="statcard"><span class="statlbl">via generate</span><span class="statnum">${data.generated}</span></div>
+            <div class="statcard"><span class="statlbl">via random</span><span class="statnum">${data.random}</span></div>
+        `;
     }
-]
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+    function loadStats(){
+        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0}');
+        renderStats(stats);
+    }
 
-@app.route("/generate", methods=["POST"])
-def generate():
-    data = request.get_json(silent=True) or request.form
+    function saveStat(time,skill,cat,type){
+        let stats = JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0}');
+        stats.total++;
+        stats.cats[cat] = (stats.cats[cat] || 0)+1;
+        stats.skills[skill]=(stats.skills[skill]||0)+1;
+        stats.times[time]=(stats.times[time]||0)+1;
+        stats[type]++;
+        localStorage.setItem("stats",JSON.stringify(stats));
+        renderStats(stats);
+    }
 
-    if not data:
-        return jsonify({"error": "No data received"}), 400
+    function saveToRecents(idea) {
+        let recents = JSON.parse(localStorage.getItem("recents") || "[]");
+        recents.unshift({ title: idea.title, time: Date.now() });
+        if (recents.length > 5) recents.pop();
+        localStorage.setItem("recents", JSON.stringify(recents));
+        renderRecents();
+    }
 
-    time = data.get("time")
-    skill = data.get("skill")
-    category = data.get("category")
+    function renderRecents() {
+        let recents = JSON.parse(localStorage.getItem("recents") || "[]");
+        const el = document.getElementById("recents");
+        if (recents.length === 0) {
+            el.innerHTML = `<li class="muted" style="font-size:0.8rem">no ideas yet</li>`;
+            return;
+        }
+        el.innerHTML = recents.map(r =>
+            `<li style="font-size:0.8rem;color:#374151;padding:0.3rem 0;border-bottom:1px solid #e5e7eb">${r.title}</li>`
+        ).join("");
+    }
+    function saveIdea(idea){
+        let saved=JSON.parse(localStorage.getItem("saved")||"[]");
+        saved.unshift(idea);
+        if(saved.length>20)saved.pop();
+        localStorage.setItem("saved",JSON.stringify(saved));
+        alert("idea saved");
+    }
 
-    if not OPENROUTER_API_KEY:
-        return jsonify({"error": "API key not set"}), 500
+    window.onload = () => {
+        document.getElementById("nav").innerHTML    = mkNav(navItems);
+        document.getElementById("mobnav").innerHTML = mkNav(navItems);
+        document.getElementById("time").innerHTML   = '<option value="">Select</option>' + mkOpts(timeOpts);
+        document.getElementById("skill").innerHTML  = '<option value="">Select</option>' + mkOpts(skillOpts);
+        document.getElementById("cat").innerHTML    = '<option value="">Select</option>' + mkOpts(catOpts);
 
-    prompt = f"""
-Generate a UNIQUE student project idea.
+        renderRecents();
+        loadStats();
 
-Time: {time}
-Skill: {skill}
-Category: {category}
+        document.getElementById("menubtn").addEventListener("click", () => {
+            const m = document.getElementById("mobmenu");
+            m.style.display = m.style.display === "block" ? "none" : "block";
+        });
 
-Return ONLY JSON:
-{{
-"title":"",
-"description":"",
-"whyItMatters":"",
-"coreFeatures":["","",""],
-"techStack":["","",""],
-"bonus":""
-}}
-"""
+        document.getElementById("savebtn").addEventListener("click", () => {
+            const idea = JSON.parse(localStorage.getItem("lastidea") || "null");
+            if (!idea) { alert("no idea to save rn"); return; }
+            saveIdea(idea);
+        });
 
-    try:
-        response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "gpt-4o-mini",
-                "messages": [{"role": "user", "content": prompt}]
+        document.getElementById("genbtn").addEventListener("click", async () => {
+            const time  = document.getElementById("time").value;
+            const skill = document.getElementById("skill").value;
+            const cat   = document.getElementById("cat").value;
+            if (!time || !skill || !cat) { alert("select all fields"); return; }
+            document.getElementById("output").innerHTML = "Generating... ⏳";
+            try {
+                const res  = await fetch("/generate", {
+                    method:  "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body:    JSON.stringify({ time, skill, category: cat })
+                });
+                const idea = await res.json();
+                document.getElementById("output").innerHTML = idea.error ? `<p class="err">${idea.error}</p>` : mkIdea(idea);
+                if (!idea.error) {
+                    localStorage.setItem("lastidea", JSON.stringify(idea));
+                    saveStat(time, skill, cat, "generated");
+                    saveToRecents(idea);
+                }
+            } catch {
+                document.getElementById("output").innerHTML = `<p class="err">Server error</p>`;
             }
-        )
+        });
 
-        result = response.json()
-
-        if "error" in result:
-            return jsonify({"api_error": result}), 500
-
-        if "choices" not in result:
-            return jsonify({"unexpected_response": result}), 500
-
-        text = result["choices"][0]["message"]["content"]
-
-        try:
-            return jsonify(json.loads(text))
-        except:
-            match = re.search(r'\{.*\}', text, re.DOTALL)
-            if match:
-                return jsonify(json.loads(match.group()))
-            else:
-                return jsonify({"error": "JSON parse failed", "raw": text}), 500
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/random")
-def random_idea():
-    return jsonify(random.choice(fallback_ideas))
-
-if __name__ == "__main__":
-    app.run(debug=True)
+        document.getElementById("randbtn").addEventListener("click", async () => {
+            const res  = await fetch("/random");
+            const idea = await res.json();
+            document.getElementById("output").innerHTML = mkIdea(idea);
+            localStorage.setItem("lastidea", JSON.stringify(idea));
+            saveStat("none", "none", "none", "random");
+            saveToRecents(idea);
+        });
+    };
+</script>
+</body>
+</html>
