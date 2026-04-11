@@ -378,11 +378,11 @@
     }
 
     function loadStats(){
-        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills:{},"times":{},"generated":0,"random":0');
+        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0');
         renderStats(stats);
     }
 
-    function saveStats(time,skill,cat,type){
+    function saveStat(time,skill,cat,type){
         let stats = JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0}');
         stats.total++;
         stats.cats[cat] = (stats.cats[cat] || 0)+1;
@@ -411,6 +411,13 @@
         el.innerHTML = recents.map(r =>
             `<li style="font-size:0.8rem;color:#374151;padding:0.3rem 0;border-bottom:1px solid #e5e7eb">${r.title}</li>`
         ).join("");
+    }
+    function saveIdea(idea){
+        let saved=JSON.parse(localStorage.getItem("saved")||"[]");
+        saved.unshift(idea);
+        if(saved.length>20)saved.pop();
+        localStorage.setItem("saved",JSON.stringify(saved));
+        alert("idea saved");
     }
 
     window.onload = () => {
