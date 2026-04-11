@@ -378,7 +378,7 @@
     }
 
     function loadStats(){
-        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0');
+        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0}');
         renderStats(stats);
     }
 
