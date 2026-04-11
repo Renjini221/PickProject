@@ -377,28 +377,20 @@
         `;
     }
 
-    async function loadStats() {
-        const res  = await fetch("/stats");
-        const data = await res.json();
-        renderStats(data);
+    function loadStats(){
+        const stats=JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills:{},"times":{},"generated":0,"random":0');
+        renderStats(stats);
     }
 
-    async function saveStat(time, skill, cat, type) {
-        const res  = await fetch("/stats/update", {
-            method:  "POST",
-            headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify({ time, skill, cat, type })
-        });
-        const data = await res.json();
-        renderStats(data);
-    }
-
-    function saveIdea(idea) {
-        let saved = JSON.parse(localStorage.getItem("saved") || "[]");
-        saved.unshift(idea);
-        if (saved.length > 20) saved.pop();
-        localStorage.setItem("saved", JSON.stringify(saved));
-        alert("idea saved!");
+    function saveStats(time,skill,cat,type){
+        let stats = JSON.parse(localStorage.getItem("stats")||'{"total":0,"cats":{},"skills":{},"times":{},"generated":0,"random":0}');
+        stats.total++;
+        stats.cats[cat] = (stats.cats[cat] || 0)+1;
+        stats.skills[skill]=(stats.skills[skill]||0)+1;
+        stats.times[time]=(stats.times[time]||0)+1;
+        stats[type]++;
+        localStorage.setItem("stats",JSON.stringify(stats));
+        renderStats(stats);
     }
 
     function saveToRecents(idea) {
