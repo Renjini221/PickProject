@@ -7,237 +7,448 @@
     <title>Student Project Idea Generator</title>
     <meta name="description" content="Generate unique project ideas for students based on time, skill level, and category">
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#2563EB",
-                        secondary: "#10B981",
-                        accent: "#F59E0B"
-                    },
-                    fontFamily: {
-                        'sans': ['"Comic Neue"', 'cursive', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
+   <style>
+     * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+ }
+
+ body {
+     font-family: 'Comic Neue', cursive, sans-serif;
+     min-height: 100vh;
+     background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+ }
+
+ .header {
+     background: #fff;
+     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+     position: sticky;
+     top: 0;
+     z-index: 10;
+ }
+
+ .wrap {
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 0 1rem;
+ }
+
+ .row {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     padding: 1rem 0;
+ }
+
+ .title {
+     font-size: 1.25rem;
+     font-weight: 700;
+     color: #1f2937;
+ }
+
+ #nav {
+     display: flex;
+     gap: 1.5rem;
+     list-style: none;
+ }
+
+ #nav a {
+     color: #4b5563;
+     text-decoration: none;
+     font-size: 0.95rem;
+ }
+
+ #nav a:hover {
+     color: #2563eb;
+ }
+
+ #menubtn {
+     display: none;
+     background: none;
+     border: none;
+     font-size: 1rem;
+     color: #4b5563;
+     cursor: pointer;
+ }
+
+ #mobmenu {
+     display: none;
+     padding-bottom: 1rem;
+ }
+
+ #mobnav {
+     list-style: none;
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
+
+ #mobnav a {
+     color: #4b5563;
+     text-decoration: none;
+ }
+
+ main {
+     padding: 2rem 1rem;
+     max-width: 1200px;
+     margin: 0 auto;
+ }
+
+ .hero {
+     text-align: center;
+     margin-bottom: 3rem;
+ }
+
+ .h2 {
+     font-size: 2rem;
+     font-weight: 700;
+     color: #1f2937;
+     margin-bottom: 1rem;
+ }
+
+ .sub {
+     color: #4b5563;
+     max-width: 42rem;
+     margin: 0 auto;
+     line-height: 1.6;
+ }
+
+ .g3 {
+     display: grid;
+     grid-template-columns: 1fr 2fr;
+     gap: 2rem;
+ }
+
+ .g2 {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.5rem;
+ }
+
+ .card {
+     background: #fff;
+     border-radius: 0.75rem;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+     padding: 1.5rem;
+ }
+
+ .h3 {
+     font-size: 1.15rem;
+     font-weight: 600;
+     color: #1f2937;
+     margin-bottom: 1.5rem;
+ }
+
+ .h4 {
+     font-size: 1rem;
+     font-weight: 600;
+     color: #1f2937;
+     margin-bottom: 1rem;
+ }
+
+ .fields {
+     display: flex;
+     flex-direction: column;
+     gap: 1.25rem;
+ }
+
+ .lbl {
+     display: block;
+     font-size: 0.875rem;
+     font-weight: 500;
+     color: #374151;
+     margin-bottom: 0.4rem;
+ }
+
+ .field {
+     width: 100%;
+     padding: 0.75rem 1rem;
+     border: 1px solid #d1d5db;
+     border-radius: 0.5rem;
+     font-family: inherit;
+     font-size: 0.95rem;
+     outline: none;
+     transition: border 0.2s;
+ }
+
+ .field:focus {
+     border-color: #2563eb;
+     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+ }
+
+ .btn {
+     width: 100%;
+     background: #2563eb;
+     color: #fff;
+     font-family: inherit;
+     font-weight: 600;
+     font-size: 0.95rem;
+     padding: 0.75rem 1rem;
+     border: none;
+     border-radius: 0.5rem;
+     cursor: pointer;
+     transition: background 0.2s;
+ }
+
+ .btn:hover {
+     background: #1d4ed8;
+ }
+
+ .sbtn {
+     background: #2563eb;
+     color: #fff;
+     font-family: inherit;
+     font-size: 0.875rem;
+     padding: 0.5rem 1rem;
+     border: none;
+     border-radius: 0.5rem;
+     cursor: pointer;
+     transition: background 0.2s;
+ }
+
+ .sbtn:hover {
+     background: #1d4ed8;
+ }
+
+ .divider {
+     margin-top: 2rem;
+     padding-top: 1.5rem;
+     border-top: 1px solid #e5e7eb;
+ }
+
+ .divider h4 {
+     font-size: 0.875rem;
+     font-weight: 500;
+     color: #374151;
+     margin-bottom: 0.75rem;
+ }
+
+ #recents {
+     list-style: none;
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
+
+ .outrow {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     margin-bottom: 1.5rem;
+ }
+
+ .btngroup {
+     display: flex;
+     gap: 0.5rem;
+ }
+
+ #output {
+     min-height: 6rem;
+ }
+
+ .placeholder {
+     text-align: center;
+     padding: 3rem 0;
+     color: #6b7280;
+ }
+
+ .muted {
+     color: #6b7280;
+ }
+
+ .idea {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+ }
+
+ .idea h4 {
+     font-size: 1.4rem;
+     font-weight: 700;
+     color: #1f2937;
+ }
+
+ .idea p {
+     color: #374151;
+     line-height: 1.6;
+ }
+
+ .idea ul {
+     padding-left: 1.2rem;
+ }
+
+ .idea ul li {
+     margin-bottom: 0.3rem;
+     color: #374151;
+ }
+
+ .err {
+     color: #ef4444;
+ }
+
+ @media (max-width: 900px) {
+     .g3 {
+         grid-template-columns: 1fr;
+     }
+
+     .g2 {
+         grid-template-columns: 1fr;
+     }
+ }
+
+ @media (max-width: 600px) {
+     #nav {
+         display: none;
+     }
+
+     #menubtn {
+         display: block;
+     }
+
+     .h2 {
+         font-size: 1.5rem;
+     }
+ }
+ .statcard{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0.5rem 0;
+    border-bottom:1px solid #e5e7eb;
+ }
+ .statcard:last-child{
+    border-bottom:none;
+
+ }
+ .statlbl{
+    font-size:0.6rem;
+    color:#6b7280;
+ }
+ .statnum{
+    font-size:1rem;
+    font-weight:700;
+    color:#2563eb;
+ }
+   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 font-sans">
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <h1 class="text-xl font-bold text-gray-800">ProjectGen</h1>
-                </div>
-                <ul id="nav-list" class="hidden md:flex space-x-6"></ul>
-                <button id="mobile-menu-btn" class="md:hidden text-gray-600">
-                    <span class="text-lg">Menu</span>
-                </button>
+<body>
+    <header class="header">
+        <nav class="wrap">
+            <div class="row">
+                <h1 class="title">ProjectGen</h1>
+                <ul id="nav"></ul>
+                <button id="menubtn">Menu</button>
             </div>
-            <div id="mobile-menu" class="hidden md:hidden mt-4">
-                <ul id="mobile-nav-list" class="space-y-2"></ul>
-            </div>
+            <div id="mobmenu"><ul id="mobnav"></ul></div>
         </nav>
     </header>
-
-    <main class="container mx-auto px-4 py-8">
-        <section class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Smart Project Idea Generator</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Generate unique, practical project ideas tailored to your available time, skill level, and interests.</p>
+    <main class="wrap">
+        <section class="hero">
+            <h2 class="h2">Smart Project Idea Generator</h2>
+            <p class="sub">Generate unique, practical project ideas tailored to your available time, skill level, and interests.</p>
         </section>
-
-        <div class="grid lg:grid-cols-3 gap-8">
-            <section class="lg:col-span-1 bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-xl font-semibold text-gray-800 mb-6">Project Parameters</h3>
-                
-                <div class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Time Available</label>
-                        <select id="time-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <option value="">Select time frame</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Skill Level</label>
-                        <select id="skill-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <option value="">Select skill level</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                        <select id="category-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <option value="">Select category</option>
-                        </select>
-                    </div>
-
-                    <button id="generate-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 transition duration-200 flex items-center justify-center">
-                        Generate Project Idea
-                    </button>
-
-                    <button id="random-btn" class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 transition duration-200 flex items-center justify-center">
-                        Random Idea
-                    </button>
+        <div class="g3">
+            <section class="card">
+                <h3 class="h3">Project Parameters</h3>
+                <div class="fields">
+                   <div><label class="lbl">Time Available</label><select id="time" class="field"></select></div>
+<div><label class="lbl">Skill Level</label><select id="skill" class="field"></select></div>
+<div><label class="lbl">Category</label><select id="cat" class="field"></select></div>
+                    <button id="genbtn" class="btn">Generate Project Idea</button>
+                    <button id="randbtn" class="btn">Random Idea</button>
                 </div>
-
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <h4 class="text-sm font-medium text-gray-700 mb-3">Recent Ideas</h4>
-                    <ul id="recent-ideas" class="space-y-2"></ul>
-                </div>
+                <div class="divider"><h4>Recent Ideas</h4><ul id="recents"></ul></div>
             </section>
-
-            <section class="lg:col-span-2">
-                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold text-gray-800">Generated Project Idea</h3>
-                        <div class="flex space-x-2">
-                            <button id="save-btn" class="px-4 py-2 text-sm bg-primary hover:bg-primary/90 text-white">Save</button>
-                            <button id="share-btn" class="px-4 py-2 text-sm bg-primary hover:bg-primary/90 text-white">Share</button>
-                        </div>
+            <section>
+                <div class="card" style="margin-bottom:1.5rem">
+                    <div class="outrow">
+                        <h3 class="h3">Generated Project Idea</h3>
+                        <div class="btngroup"><button id="savebtn" class="sbtn">Save</button><button id="sharebtn" class="sbtn">Share</button></div>
                     </div>
-
-                    <div id="idea-output" class="space-y-6">
-                        <div class="text-center py-12">
-                            <p class="text-gray-500">Select your parameters and click "Generate Project Idea" to get started</p>
-                        </div>
-                    </div>
+                    <div id="output"><div class="placeholder"><p class="muted">Select your parameters and click "Generate Project Idea" to get started</p></div></div>
                 </div>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Project Statistics</h4>
-                        <div id="stats-container" class="space-y-4"></div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-lg p-6">
-                        <h4 class="text-lg font-semibold text-gray-800 mb-4">Featured Projects</h4>
-                        <div id="featured-projects" class="space-y-4"></div>
-                    </div>
+                <div class="g2">
+                    <div class="card"><h4 class="h4">Project Statistics</h4><div id="stats"></div></div>
+                    <div class="card"><h4 class="h4">Featured Projects</h4><div id="featured"></div></div>
                 </div>
             </section>
         </div>
     </main>
-
 <script>
-    const navigationItems = [
-        { label: "Home", href: "#home" },
-        { label: "Generator", href: "#generator" },
-        { label: "Browse", href: "#browse" },
-        { label: "Saved", href: "#saved" },
-        { label: "About", href: "#about" }
-    ];
+    const navItems = [{ label:"Home",href:"#home"},{ label:"Generator",href:"#generator"},{ label:"Browse",href:"#browse"},{ label:"Saved",href:"#saved"},{ label:"About",href:"#about"}];
+    const timeOpts = [{ value:"weekend",label:"Weekend Project (2-3 days)"},{ value:"week",label:"One Week Project"},{ value:"month",label:"Month-long Project"},{ value:"semester",label:"Semester Project"},{ value:"summer",label:"Summer Break Project"}];
+    const skillOpts = [{ value:"beginner",label:"Beginner"},{ value:"intermediate",label:"Intermediate"},{ value:"advanced",label:"Advanced"}];
+    const catOpts = [{ value:"web",label:"Web Application"},{ value:"ai",label:"AI/ML Project"},{ value:"social",label:"Social Impact"},{ value:"productivity",label:"Productivity Tool"}];
+    const mkNav  = items => items.map(i=>`<li><a href="${i.href}">${i.label}</a></li>`).join("");
+    const mkOpts = opts  => opts.map(o=>`<option value="${o.value}">${o.label}</option>`).join("");
+    const mkIdea = idea  => `<div class="idea"><h4>${idea.title}</h4><p>${idea.description}</p><p><b>Why:</b> ${idea.whyItMatters||idea.why||"Not specified"}</p><div><b>Features:</b><ul>${idea.coreFeatures.map(f=>`<li>✔ ${f}</li>`).join("")}</ul></div><p><b>Tech:</b> ${idea.techStack.join(", ")}</p><p><b>Bonus:</b> ${idea.bonus}</p></div>`;
 
-    const timeOptions = [
-        { value: "weekend", label: "Weekend Project (2-3 days)" },
-        { value: "week", label: "One Week Project" },
-        { value: "month", label: "Month-long Project" },
-        { value: "semester", label: "Semester Project" },
-        { value: "summer", label: "Summer Break Project" }
-    ];
+    const best = obj => Object.entries(obj).sort((a,b)=>b[1]-a[1])[0]?.[0] || "none";
+ 
 
-    const skillOptions = [
-        { value: "beginner", label: "Beginner" },
-        { value: "intermediate", label: "Intermediate" },
-        { value: "advanced", label: "Advanced" }
-    ];
+    function renderStats(data) {
+       document.getElementById("stats").innerHTML = `
+       <div class="statcard"><span class="statlbl">total generated</span><span class="statnum">${data.total}</span></div>
 
-    const categoryOptions = [
-        { value: "web", label: "Web Application" },
-        { value: "ai", label: "AI/ML Project" },
-        { value: "social", label: "Social Impact" },
-        { value: "productivity", label: "Productivity Tool" }
-    ];
+       <div class="statcard"><span class="statlbl">top category</span><span class="statnum">${best(data.cats)}</span></div>
+       <div class="statcard"><span class="statlbl">top skills</span><span class="statnum">${best(data.skills)}</span></div>
+       <div class="statcard"><span class="statlbl">top timeframe</span><span class="statnum">${best(data.times)}</span></div>
 
-    function renderNavItems(items) {
-        return items.map(item => 
-            `<li><a href="${item.href}" class="flex items-center text-gray-600 hover:text-primary">${item.label}</a></li>`
-        ).join("");
+       <div class="statcard"><span class="statlbl">via generate</span><span class="statnum">${data.generated}</span></div>
+       <div class="statcard"><span class="statlbl">via random</span><span class="statnum">${data.random}</span></div>
+       `;
+
+    }
+    async function loadStats() {
+        const res = await fetch("/stats");
+        const data = await res.json();
+        renderStats(data);
     }
 
-    function renderSelectOptions(options) {
-        return options.map(option => 
-            `<option value="${option.value}">${option.label}</option>`
-        ).join("");
+    async function saveStat(time, skill, cat,type){
+        const res = await fetch("/stats/update",{
+            method:"POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({time,skill,cat,type})
+        });
+        const data = await res.json();
+        renderStats(data);
     }
+   
+    window.onload = () => {
+        document.getElementById("nav").innerHTML = mkNav(navItems);
+        document.getElementById("mobnav").innerHTML = mkNav(navItems);
+        document.getElementById("time").innerHTML = `<option value="">Select</option>` + mkOpts(timeOpts);
+        document.getElementById("skill").innerHTML = `<option value="">Select</option>` + mkOpts(skillOpts);
+        document.getElementById("cat").innerHTML = `<option value="">Select</option>` + mkOpts(catOpts);
 
-    function renderProjectIdea(idea) {
-        return `
-        <div class="space-y-4">
-            <h4 class="text-2xl font-bold">${idea.title}</h4>
-            <p>${idea.description}</p>
-            <p><b>Why:</b> ${idea.whyItMatters || idea.why || "Not specified"}</p>
-
-            <div>
-                <b>Features:</b>
-                <ul>
-                    ${idea.coreFeatures.map(f => `<li>✔ ${f}</li>`).join("")}
-                </ul>
-            </div>
-
-            <div>
-                <b>Tech:</b> ${idea.techStack.join(", ")}
-            </div>
-
-            <div>
-                <b>Bonus:</b> ${idea.bonus}
-            </div>
-        </div>`;
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("nav-list").innerHTML = renderNavItems(navigationItems);
-        document.getElementById("mobile-nav-list").innerHTML = renderNavItems(navigationItems);
-
-        document.getElementById("time-select").innerHTML =
-            '<option value="">Select</option>' + renderSelectOptions(timeOptions);
-        document.getElementById("skill-select").innerHTML =
-            '<option value="">Select</option>' + renderSelectOptions(skillOptions);
-        document.getElementById("category-select").innerHTML =
-            '<option value="">Select</option>' + renderSelectOptions(categoryOptions);
-
-        document.getElementById("generate-btn").addEventListener("click", async function () {
-            const time = document.getElementById("time-select").value;
-            const skill = document.getElementById("skill-select").value;
-            const category = document.getElementById("category-select").value;
-
-            if (!time || !skill || !category) {
-                alert("Select all fields");
-                return;
-            }
-
-            document.getElementById("idea-output").innerHTML = "Generating... ⏳";
-
+        document.getElementById ("menubtn").addEventListener("click",()=>{
+            const m = document.getElementById("mobmenu");
+            m.style.display = m.style.display ===  "block" ? "none" : "block";
+        });
+        document.getElementById("genbtn").addEventListener("click",async ()=> {
+            const time = document.getElementById("time").value;
+            const skill = document.getElementById("skill").value;
+            const cat = document.getElementById("cat").value;
+            if(!time||!skill||!cat){alert("select all fields"); return;}
+            document.getElementById("output").innerHTML = "Gnerting....";
             try {
-                const res = await fetch("/generate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ time, skill, category })
-                });
-
+                const res = await fetch("/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({time,skill,category:cat})});
                 const idea = await res.json();
-
-                if (idea.error) {
-                    document.getElementById("idea-output").innerHTML =
-                        `<p class="text-red-500">${idea.error}</p>`;
-                } else {
-                    document.getElementById("idea-output").innerHTML = renderProjectIdea(idea);
-                }
-
-            } catch (err) {
-                document.getElementById("idea-output").innerHTML =
-                    `<p class="text-red-500">Server error</p>`;
-            }
-        });
-        document.getElementById("random-btn").addEventListener("click", async function () {
-            const res = await fetch("/random");
+                document.getElementById("output").innerHTML = idea.error ? `<p class="err">${idea.error}</p>` : mkIdea(idea);
+                if (!idea.error) saveStat(time, skill, cat, "generated");
+            }catch { document.getElementById("output").innerHTML = `<p class="err">Server error</p>`; }
+            })
+              document.getElementById("randbtn").addEventListener("click", async () => {
+            const res  = await fetch("/random");
             const idea = await res.json();
-            document.getElementById("idea-output").innerHTML = renderProjectIdea(idea);
-        });
-    });
+            document.getElementById("output").innerHTML = mkIdea(idea);
+            saveStat("none", "none", "none", "random");
+        })
+         loadStats();
+    }
+    
 </script>
 </body>
 </html>
